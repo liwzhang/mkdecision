@@ -26,11 +26,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Form(props) {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit } = useForm();
   const classes = useStyles();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    fetch(
+      "https://86upx61e6j.execute-api.us-west-1.amazonaws.com/01/contact-me",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    )
+      .then((res) => {
+        console.log("Success! ", res);
+      })
+      .catch((err) => {
+        console.log("Error! ", err);
+      });
   };
 
   return (
