@@ -8,29 +8,37 @@ import {
   makeStyles,
 } from "@material-ui/core";
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     marginTop: theme.spacing(8),
-//     display: "flex",
-//     flexDirection: "column",
-//     alignItems: "center",
-//   },
-// }));
+const useStyles = makeStyles((theme) => ({
+  main: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    backgroundColor: "#1976d2",
+  },
+}));
 
 export default function Form(props) {
   const { register, handleSubmit, errors } = useForm();
-  //const classes = useStyles();
+  const classes = useStyles();
 
   const onSubmit = (data) => {
     console.log(data);
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={classes.main}>
       <Typography component="h1" variant="h5">
         Contact Form
       </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
         <TextField
           required
           fullWidth
@@ -60,7 +68,13 @@ export default function Form(props) {
           name="message"
           {...register("message")}
         />
-        <Button fullWidth type="submit" color="default" variant="contained">
+        <Button
+          fullWidth
+          type="submit"
+          color="primary"
+          variant="contained"
+          className={classes.submit}
+        >
           Submit
         </Button>
       </form>
