@@ -23,10 +23,20 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
     backgroundColor: "#1976d2",
   },
+  validation: {
+    fontSize: "10px",
+    color: "red",
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export default function Form(props) {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ mode: "onBlur" });
   const classes = useStyles();
 
   const onSubmit = async (data) => {
@@ -43,7 +53,18 @@ export default function Form(props) {
       }
     )
       .then((res) => {
-        console.log("Success! ", res);
+        return res.json();
+      })
+      .then((res) => {
+        console.log("Response ", res);
+        if (res.body.success) {
+          alert("Email sent successfully!");
+          reset();
+        } else {
+          alert(
+            "Emails can only be sent to Amazon SES verified addresses. Please try again with a verified email address."
+          );
+        }
       })
       .catch((err) => {
         console.log("Error! ", err);
@@ -63,8 +84,13 @@ export default function Form(props) {
           variant="outlined"
           margin="normal"
           name="name"
-          {...register("name")}
+          {...register("name", { required: true })}
         />
+        {errors.name && (
+          <Typography className={classes.validation}>
+            Please enter a name.
+          </Typography>
+        )}
         <TextField
           required
           fullWidth
@@ -72,8 +98,13 @@ export default function Form(props) {
           variant="outlined"
           margin="normal"
           name="email"
-          {...register("email")}
+          {...register("email", { required: true })}
         />
+        {errors.email && (
+          <Typography className={classes.validation}>
+            Please enter an email.
+          </Typography>
+        )}
         <TextField
           required
           fullWidth
@@ -83,8 +114,13 @@ export default function Form(props) {
           variant="outlined"
           margin="normal"
           name="message"
-          {...register("message")}
+          {...register("message", { required: true })}
         />
+        {errors.message && (
+          <Typography className={classes.validation}>
+            Please enter a message.
+          </Typography>
+        )}
         <Button
           fullWidth
           type="submit"
